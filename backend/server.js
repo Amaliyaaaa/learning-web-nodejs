@@ -12,8 +12,6 @@ const fastify = Fastify({ logger: true });
 // --- РЕГИСТРАЦИЯ СТАТИКИ ---
 
 fastify.register(FastifyStatic, {
-  // Поднимаемся на один уровень из /app/backend/ в /app/
-  // и заходим в /app/public/
   root: path.join(__dirname, '..', 'public'),
 });
 
