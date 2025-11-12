@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Лабораторная 7, задание 1. Ибрагимова А.Ф., ИТ2301</title>
+</head>
+
+<body>
+    <h1>Задание 1</h1>
+    <h2>Калькулятор</h2>
+
+    <div class="calc">
+        <input type="number" id="a" placeholder="Число A">
+        <label for="operation" class="hidden">Операция</label>
+        <select id="operation">
+            <option value="add">+</option>
+            <option value="subtract">-</option>
+            <option value="multiply">х</option>
+            <option value="divide">/</option>
+        </select>
+        <input type="number" id="b" placeholder="Число B">
+        <button id="calcBtn">Посчитать</button>
+    </div>
+
+    <p id="result"></p>
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>

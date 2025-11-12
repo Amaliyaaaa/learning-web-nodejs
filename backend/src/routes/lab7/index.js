@@ -39,4 +39,31 @@ export default async function routes(fastify, options) {
     // Fastify автоматически обработает ошибку и вернет 404
     reply.code(404).send({ error: 'User not found' });
   });
+
+  // --- Калькулятор ---
+  fastify.get("/calc", async (request, reply) => {
+    const { operation, a, b } = request.query;
+    const numA = parseFloat(a);
+    const numB = parseFloat(b);
+
+    if (isNaN(numA) || isNaN(numB)) {
+      reply.code(400);
+      return { error: 'Параметры должны быть числами' };
+    }
+
+    let result;
+    switch (operation) {
+      case 'add': result = numA + numB; break;
+      case 'subtract': result = numA - numB; break;
+      case 'multiply': result = numA * numB; break;
+      case 'divide':
+        if (numB === 0) return { error: 'Деление на ноль' };
+        result = numA / numB;
+        break;
+      default:
+        return { error: 'Неизвестная операция' };
+    }
+
+    return { a: numA, b: numB, operation, result };
+  });
 }

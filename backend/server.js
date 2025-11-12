@@ -16,7 +16,7 @@ fastify.register(FastifyStatic, {
   // и заходим в /app/public/
   root: path.join(__dirname, '..', 'public'),
   index: "index.html",
-  wildcard: false
+  wildcard: false,
 });
 
 // --- РЕГИСТРАЦИЯ РОУТЕРОВ ДЛЯ ЛАБОРАТОРНЫХ ---
