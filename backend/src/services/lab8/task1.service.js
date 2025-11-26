@@ -11,7 +11,7 @@ class Task1Service {
   async readUsers() {
     try {
       const data = await fs.readFile(dataFilePath, 'utf8');
-      return data.trim() 
+      return data.trim()
         ? data.split('\n').filter(line => line.trim()).map(line => JSON.parse(line))
         : [];
     } catch (error) {
@@ -26,6 +26,7 @@ class Task1Service {
   async writeUser(user) {
     await fs.mkdir(path.dirname(dataFilePath), { recursive: true });
     await fs.appendFile(dataFilePath, JSON.stringify(user) + '\n', 'utf8');
+    //await fs.writeFile(dataFilePath, JSON.stringify(user), 'utf-8');
   }
 
   async getAll() {

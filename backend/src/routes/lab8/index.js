@@ -40,6 +40,7 @@ export default async function routes(fastify, options) {
 
   fastify.get("/task2/groups", async (request, reply) => {
     try {
+      await task2Service.processAndSave();
       const groups = await task2Service.getGroups();
       return groups;
     } catch (error) {
@@ -50,6 +51,7 @@ export default async function routes(fastify, options) {
 
   fastify.get("/task2/stadiums", async (request, reply) => {
     try {
+      await task2Service.processAndSave();
       const stadiums = await task2Service.getStadiums();
       return stadiums;
     } catch (error) {
