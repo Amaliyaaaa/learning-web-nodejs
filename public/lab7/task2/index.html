@@ -4,94 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторная 7, задание 1. Ибрагимова А.Ф., ИТ2301</title>
+    <title>Лабораторная 7, задание 2. Ибрагимова А.Ф., ИТ2301</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <h1>Задание 2</h1>
-    <h2>Форма пользователя</h2>
 
-    <form id="userForm">
-        <div class="form-section">
-            <h2 class="section-title">Личная информация</h2>
+    <form id="userForm" method="GET" action="/api/lab7/task2/makeInitials">
+        <fieldset>
+            <legend>ФИО</legend>
+            <input type="text" id="lastname" name="lastname" placeholder="Фамилия" required>
+            <input type="text" id="firstname" name="firstname" placeholder="Имя" required>
+            <input type="text" id="surname" name="surname" placeholder="Отчество" required>
+        </fieldset>
 
-            <div class="form-group">
-                <div class="form-row">
-                    <div>
-                        <label for="lastname" class="required">Фамилия</label>
-                        <input type="text" id="lastname" name="lastname" required placeholder="Введите фамилию"
-                            value="Ибрагимова">
-                    </div>
-                    <div>
-                        <label for="firstname" class="required">Имя</label>
-                        <input type="text" id="firstname" name="firstname" required placeholder="Введите имя"
-                            value="Амалия">
-                    </div>
-                    <div>
-                        <label for="surname">Отчество</label>
-                        <input type="text" id="surname" name="surname" placeholder="Введите отчество"
-                            value="Фуадовна">
-                    </div>
-                </div>
-            </div>
+        <fieldset>
+            <legend>Пол</legend>
+            <label><input type="radio" name="gender" value="Мужской" required> Мужской</label>
+            <label><input type="radio" name="gender" value="Женский"> Женский</label>
+        </fieldset>
 
-            <div class="form-group">
-                <label class="required">Пол</label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="male" name="gender" value="male">
-                        <label for="male">Мужской</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="female" name="gender" value="female" required checked>
-                        <label for="female">Женский</label>
-                    </div>
-                </div>
-            </div>
+        <fieldset>
+            <legend>Факультет</legend>
+            <select id="faculty" name="faculty" required title="Выберите факультет">
+                <option value="">Не выбран</option>
+                <option value="ИТ">ИТ</option>
+                <option value="Экономика">Экономика</option>
+                <option value="Менеджмент">Менеджмент</option>
+            </select>
+        </fieldset>
 
-            <div class="form-group">
-                <label for="faculty" class="required">Факультет</label>
-                <select id="faculty" name="faculty" required>
-                    <option value="">Выберите факультет</option>
-                    <option value="fit" selected>Факультет информационных технологий</option>
-                    <option value="ef">Экономический факультет</option>
-                    <option value="lf">Юридический факультет</option>
-                </select>
-            </div>
-        </div>
+        <fieldset>
+            <legend>Участие в проекте</legend>
+            <label><input type="checkbox" id="project" name="project"> Участвую</label>
+            <input type="text" id="projectName" name="projectName" placeholder="Название проекта"
+                style="display: none;">
+        </fieldset>
 
-        <div class="form-section">
-            <h2 class="section-title">Проект</h2>
-
-            <div class="form-group">
-                <div class="checkbox-group">
-                    <div class="checkbox-option">
-                        <input type="checkbox" id="projectParticipant" name="projectParticipant" checked>
-                        <label for="projectParticipant">Участие в проекте</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group" id="projectNameGroup">
-                <label for="projectName">Наименование проекта</label>
-                <input type="text" id="projectName" name="projectName" placeholder="Введите название проекта"
-                    value="Flower Wish">
-            </div>
-        </div>
-
-        <div class="actions">
-            <button type="button" onclick="makeInitials()">Создать инициалы</button>
-            <button type="button" onclick="makeProjectStatus()">Статус проекта</button>
+        <div class="buttons">
+            <button type="submit" id="saveBtn">Сохранить (GET)</button>
+            <button type="button" id="projectStatusBtn">Проверить статус участия</button>
         </div>
     </form>
 
-    <!-- Результат -->
-    <!-- <div id="result" class="result" style="display: none;"> -->
-    <div id="result" class="result">
-        <h3>Результат обработки данных</h3>
-        <div id="resultContent"></div>
-    </div>
-    </div>
+    <div id="result"></div>
+
+    <script src="script.js" defer></script>
 </body>
 
 </html>
