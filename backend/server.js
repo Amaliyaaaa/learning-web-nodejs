@@ -12,7 +12,7 @@ const fastify = Fastify({ logger: true });
 // --- РЕГИСТРАЦИЯ СТАТИКИ ---
 
 fastify.register(FastifyStatic, {
-  root: path.join(__dirname, '..', 'public/lab8/'),
+  root: path.join(__dirname, '..', 'public/'),
 });
 
 // --- РЕГИСТРАЦИЯ РОУТЕРОВ ДЛЯ ЛАБОРАТОРНЫХ ---
