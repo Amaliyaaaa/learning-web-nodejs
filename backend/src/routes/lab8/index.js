@@ -61,7 +61,7 @@ export default async function routes(fastify, options) {
   });
   fastify.get("/task3/results", async (request, reply) => {
     try {
-      await task2Service.processAndSave();
+      await task3Service.generateResults();
       const results = await task3Service.getResults();
       return results;
     } catch (error) {
