@@ -1,69 +1,74 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="styles.css">
-<title>Лабораторная работа 8. Задание 1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Лабораторная работа 8. Задание 1</title>
 
 </head>
+
 <body>
 
-<div class="container">
-    <div class="form-container">
-        <h1>Форма с ФИО</h1>
-        <form id="userForm">
-            <div class="form-group">
-                <label>Фамилия:</label>
-                <input type="text" id="lastname" name="lastname" required placeholder="Введите фамилию">
-            </div>
-            <div class="form-group">
-                <label>Имя:</label>
-                <input type="text" id="firstname" name="firstname" required placeholder="Введите имя">
-            </div>
-            <div class="form-group">
-                <label>Отчество:</label>
-                <input type="text" id="surname" name="surname" required placeholder="Введите отчество">
-            </div>
-            <div class="form-group">
-                <label>Пол:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="gender" value="male" required> Мужской</label>
-                    <label><input type="radio" name="gender" value="female" required> Женский</label>
+    <div class="container">
+        <div class="form-container">
+            <h1>Форма с ФИО</h1>
+            <form id="userForm">
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <input type="text" id="lastname" name="lastname" required placeholder="Введите фамилию">
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="faculty">Факультет:</label>
-                <select id="faculty" name="faculty" required>
-                    <option value="">Выберите факультет</option>
-                    <option value="it">Прикладной информатики</option>
-                    <option value="agro">Агрономии</option>
-                    <option value="meh">Механизации</option>
-                    <option value="bio">Пищевых производств и биотехнологий</option>
-                    <option value="your">Юридический</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="projectParticipant" name="projectParticipant"> Участие в проекте</label>
+                <div class="form-group">
+                    <label>Имя:</label>
+                    <input type="text" id="firstname" name="firstname" required placeholder="Введите имя">
                 </div>
-                <div id="projectNameGroup">
-                    <label for="projectName">Наименование проекта:</label>
-                    <input type="text" id="projectName" name="projectName" placeholder="Введите название проекта">
+                <div class="form-group">
+                    <label>Отчество:</label>
+                    <input type="text" id="surname" name="surname" required placeholder="Введите отчество">
                 </div>
-            </div>
-            <div class="buttons-group">
-                <button type="button" class="save-btn" id="saveBtn">Сохранить</button>
-                <button type="button" id="getInfoBtn">Получить информацию</button>
-            </div>
-        </form>
-        <div id="result" class="result"></div>
-    </div>
+                <div class="form-group">
+                    <label>Пол:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="gender" value="male" required> Мужской</label>
+                        <label><input type="radio" name="gender" value="female" required> Женский</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="faculty">Факультет:</label>
+                    <select id="faculty" name="faculty" required>
+                        <option value="">Выберите факультет</option>
+                        <option value="it">Прикладной информатики</option>
+                        <option value="agro">Агрономии</option>
+                        <option value="meh">Механизации</option>
+                        <option value="bio">Пищевых производств и биотехнологий</option>
+                        <option value="your">Юридический</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="projectParticipant" name="projectParticipant"> Участие в
+                            проекте</label>
+                    </div>
+                    <div id="projectNameGroup">
+                        <label for="projectName">Наименование проекта:</label>
+                        <input type="text" id="projectName" name="projectName" placeholder="Введите название проекта">
+                    </div>
+                </div>
+                <div class="buttons-group">
+                    <button type="button" class="save-btn" id="saveBtn">Сохранить</button>
+                    <button type="button" id="getInfoBtn">Получить информацию</button>
+                </div>
+            </form>
+            <div id="result" class="result"></div>
+        </div>
 
-    <div class="saved-data">
-        <h2>Сохраненные данные</h2>
-        <div id="savedUsers"></div>
+        <div class="saved-data">
+            <h2>Сохраненные данные</h2>
+            <div id="savedUsers"></div>
+        </div>
+        <script src="script.js" defer></script>
     </div>
-</div>
 </body>
+
 </html>
