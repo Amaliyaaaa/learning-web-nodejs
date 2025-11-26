@@ -27,7 +27,7 @@ projectStatusBtn.addEventListener('click', async () => {
             lastname,
             firstname,
             surname,
-            project: isProject
+            projectParticipant: isProject
         });
 
         const res = await fetch(`/api/lab7/task2/makeProjectStatus?${params}`);
