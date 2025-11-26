@@ -4,21 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Задание 2: Форма пользователя - ЛР №7</title>
+    <title>Лабораторная 7, задание 1. Ибрагимова А.Ф., ИТ2301</title>
 </head>
 
 <body>
-    <div class="header">
-        <h1>Форма пользователя</h1>
-        <p>Задание 2 - Лабораторная работа №7</p>
-        <div class="nav">
-            <a href="/lab7/" class="nav-btn">Назад к ЛР7</a>
-            <a href="/" class="nav-btn">На главную</a>
-        </div>
-    </div>
+    <h1>Задание 2</h1>
+    <h2>Форма пользователя</h2>
 
     <form id="userForm">
-        <!-- ФИО -->
         <div class="form-section">
             <h2 class="section-title">Личная информация</h2>
 
@@ -27,17 +20,17 @@
                     <div>
                         <label for="lastname" class="required">Фамилия</label>
                         <input type="text" id="lastname" name="lastname" required placeholder="Введите фамилию"
-                            value="Плотников">
+                            value="Ибрагимова">
                     </div>
                     <div>
                         <label for="firstname" class="required">Имя</label>
                         <input type="text" id="firstname" name="firstname" required placeholder="Введите имя"
-                            value="Александр">
+                            value="Амалия">
                     </div>
                     <div>
                         <label for="surname">Отчество</label>
                         <input type="text" id="surname" name="surname" placeholder="Введите отчество"
-                            value="Александрович">
+                            value="Фуадовна">
                     </div>
                 </div>
             </div>
@@ -46,11 +39,11 @@
                 <label class="required">Пол</label>
                 <div class="radio-group">
                     <div class="radio-option">
-                        <input type="radio" id="male" name="gender" value="male" required checked>
+                        <input type="radio" id="male" name="gender" value="male">
                         <label for="male">Мужской</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="female" name="gender" value="female">
+                        <input type="radio" id="female" name="gender" value="female" required checked>
                         <label for="female">Женский</label>
                     </div>
                 </div>
@@ -63,16 +56,12 @@
                     <option value="fit" selected>Факультет информационных технологий</option>
                     <option value="ef">Экономический факультет</option>
                     <option value="lf">Юридический факультет</option>
-                    <option value="gf">Гуманитарный факультет</option>
-                    <option value="tf">Технический факультет</option>
-                    <option value="mf">Медицинский факультет</option>
                 </select>
             </div>
         </div>
 
-        <!-- Проектная деятельность -->
         <div class="form-section">
-            <h2 class="section-title">Проектная деятельность</h2>
+            <h2 class="section-title">Проект</h2>
 
             <div class="form-group">
                 <div class="checkbox-group">
@@ -86,11 +75,10 @@
             <div class="form-group" id="projectNameGroup">
                 <label for="projectName">Наименование проекта</label>
                 <input type="text" id="projectName" name="projectName" placeholder="Введите название проекта"
-                    value="Броня">
+                    value="Flower Wish">
             </div>
         </div>
 
-        <!-- Кнопки действий -->
         <div class="actions">
             <button type="button" onclick="makeInitials()">Создать инициалы</button>
             <button type="button" onclick="makeProjectStatus()">Статус проекта</button>
@@ -98,27 +86,11 @@
     </form>
 
     <!-- Результат -->
-    <div id="result" class="result" style="display: none;">
+    <!-- <div id="result" class="result" style="display: none;"> -->
+    <div id="result" class="result">
         <h3>Результат обработки данных</h3>
         <div id="resultContent"></div>
     </div>
-
-    <!-- Информация об API -->
-    <div class="api-info">
-        <h3>Информация об API эндпоинтах</h3>
-
-        <div class="endpoint">
-            <strong>Эндпоинт 1:</strong> GET /api/lab7/task2/makeInitials<br>
-            <strong>Параметры:</strong> lastname, firstname, surname<br>
-            <strong>Пример:</strong> /api/lab7/task2/makeInitials?lastname=Иванов&firstname=Иван&surname=Петрович
-        </div>
-
-        <div class="endpoint">
-            <strong>Эндпоинт 2:</strong> GET /api/lab7/task2/makeProjectStatus<br>
-            <strong>Параметры:</strong> lastname, firstname, surname, projectParticipant<br>
-            <strong>Пример:</strong>
-            /api/lab7/task2/makeProjectStatus?lastname=Иванов&firstname=Иван&projectParticipant=true
-        </div>
     </div>
 </body>
 

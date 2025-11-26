@@ -1,214 +1,111 @@
 body {
     font-family: sans-serif;
-    color: #fff;
-    max-width: 800px;
-    margin: 40px auto;
-    background-color: #667eea;
     padding: 20px;
+    background: #f9f9f9;
+    line-height: 1.4;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 40px;
+h1,
+h2,
+h3 {
+    color: #2c3e50;
 }
 
-.header h1 {
-    font-size: 2.2em;
-    margin-bottom: 10px;
-}
-
-.header p {
-    opacity: 0.9;
-    margin-bottom: 5px;
-}
-
-.nav {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.nav-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    max-width: 700px;
 }
 
 .form-section {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
-    border-radius: 8px;
     margin-bottom: 20px;
 }
 
 .section-title {
-    margin-bottom: 20px;
-    font-size: 1.3em;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #34495e;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
     gap: 15px;
 }
 
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
+.form-row>div {
+    flex: 1;
 }
 
 label {
+    font-size: 14px;
+    margin-bottom: 4px;
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
 }
 
 .required::after {
     content: " *";
-    color: #ffb6c1;
+    color: red;
 }
 
-input,
+input[type="text"],
 select {
     width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 1em;
+    padding: 6px 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .radio-group,
 .checkbox-group {
     display: flex;
     gap: 20px;
-    flex-wrap: wrap;
+    padding-top: 5px;
 }
 
 .radio-option,
 .checkbox-option {
     display: flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-.radio-option input[type="radio"],
-.checkbox-option input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-}
-
-.hidden {
-    display: none;
+    gap: 6px;
 }
 
 .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
+    display: flex;
     gap: 15px;
-    margin: 30px 0;
 }
 
 button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-weight: bold;
+    padding: 8px 14px;
+    font-size: 15px;
     cursor: pointer;
+    background: #3498db;
+    border: none;
+    border-radius: 4px;
+    color: white;
 }
 
 button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: #2980b9;
 }
 
 .result {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 8px;
     margin-top: 20px;
-}
-
-.result h3 {
-    margin-bottom: 15px;
-}
-
-.result-item {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.result-item:last-child {
-    border-bottom: none;
-}
-
-.result-label {
-    font-weight: bold;
-    min-width: 120px;
-}
-
-.result-value {
-    opacity: 0.9;
-}
-
-.success {
-    color: #90ee90;
-}
-
-.error {
-    color: #ffb6c1;
-}
-
-.api-info {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 30px;
-}
-
-.api-info h3 {
-    margin-bottom: 15px;
-}
-
-.endpoint {
-    background: rgba(255, 255, 255, 0.1);
     padding: 15px;
-    border-radius: 5px;
-    margin: 10px 0;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9em;
-    word-break: break-all;
+    background: #eef2f6;
+    border-radius: 8px;
+    border: 1px solid #d0d7de;
+    max-width: 700px;
 }
 
-.endpoint strong {
-    display: block;
-    margin-bottom: 5px;
-    font-family: sans-serif;
-}
-
-.url-info {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 12px;
-    border-radius: 5px;
+#resultContent {
     margin-top: 10px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.8em;
-    word-break: break-all;
+    font-size: 15px;
 }
