@@ -1,0 +1,69 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f9f9f9;
+    color: #000;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #000;
+}
+
+th {
+    background: #e6e6e6;
+    color: #000;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+tr.draw {
+    background: #f4f4f4;
+}
+
+tr.team1-win {
+    background: #ffe0e0;
+}
+
+tr.team2-win {
+    background: #e0e7ff;
+}
+
+tr:hover {
+    background: #f0f0f0;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+}
+
+strong {
+    color: #333;
+}

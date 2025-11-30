@@ -1,39 +1,27 @@
 body {
     font-family: sans-serif;
+    padding: 20px;
+    background: #f9f9f9;
+    color: #000;
     margin: 0;
-    padding: 0;
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 40px 20px;
-    box-sizing: border-box;
 }
 
 .container {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     width: 100%;
     max-width: 1000px;
+    margin: 0 auto;
 }
 
 .form-container,
 .saved-data {
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    padding: 25px 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex: 1;
     box-sizing: border-box;
-}
-
-h1,
-h2 {
-    text-align: center;
-    color: #d32f2f;
-    margin-bottom: 20px;
 }
 
 .form-group {
@@ -43,23 +31,18 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #f5f5f5;
     font-weight: 600;
 }
 
 input[type="text"],
 select {
     width: 100%;
-    padding: 8px 10px;
+    padding: 6px 10px;
     border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #1e1e1e;
-    color: #f5f5f5;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    font-size: 16px;
     box-sizing: border-box;
-}
-
-input[type="text"]::placeholder {
-    color: #ff8a80;
 }
 
 .radio-group,
@@ -94,26 +77,25 @@ input[type="text"]::placeholder {
 
 button {
     flex: 1;
-    padding: 10px;
+    padding: 8px 12px;
     font-size: 16px;
-    background-color: #b71c1c;
-    color: #fff;
-    border: none;
+    background: #d9d9d9;
+    border: 1px solid #bfbfbf;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 button:hover {
-    background-color: #ff5252;
+    background: #c7c7c7;
 }
 
 button.save-btn {
-    background-color: #d32f2f;
+    background: #e6e6e6;
 }
 
 button.save-btn:hover {
-    background-color: #ff8a80;
+    background: #d4d4d4;
 }
 
 .result {
@@ -122,26 +104,24 @@ button.save-btn:hover {
     border-radius: 5px;
     font-weight: bold;
     display: none;
-    background-color: #3b3939;
-    color: #d32f2f;
+    background: #f0f0f0;
 }
 
 .result.show {
     display: block;
 }
 
-
 .saved-data {
     max-height: 80vh;
     overflow-y: auto;
-    border: 1px solid #b71c1c;
+    border: 1px solid #e0e0e0;
 }
 
 .data-item {
     padding: 10px;
     margin: 10px 0;
-    background: #1e1e1e;
+    background: #ffffff;
     border-radius: 5px;
-    border-left: 4px solid #ff5252;
+    border-left: 4px solid #2c3e50;
     word-break: break-word;
 }
