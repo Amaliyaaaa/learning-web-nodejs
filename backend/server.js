@@ -1,5 +1,7 @@
 import Fastify from 'fastify';
 import FastifyStatic from '@fastify/static';
+import fastifyPostgres from '@fastify/postgres'; // <--- Импорт
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -9,19 +11,27 @@ const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 
+dotenv.config({ path: '.env.local' });
+
+fastify.register(fastifyPostgres, {
+  connectionString: process.env.DATABASE_URL
+});  
+
 // --- РЕГИСТРАЦИЯ СТАТИКИ ---
 
 fastify.register(FastifyStatic, {
-  root: path.join(__dirname, '..', 'public/'),
+  root: path.join(__dirname, '..', 'public'),
 });
 
 // --- РЕГИСТРАЦИЯ РОУТЕРОВ ДЛЯ ЛАБОРАТОРНЫХ ---
-// Пример для ЛР №7-8
+// Пример для ЛР №7-9
 import lab7Routes from './src/routes/lab7/index.js';
 import lab8Routes from './src/routes/lab8/index.js';
+import lab9Routes from './src/routes/lab9/index.js';
 
 fastify.register(lab7Routes, { prefix: '/api/lab7' });
 fastify.register(lab8Routes, { prefix: '/api/lab8' });
+fastify.register(lab9Routes, { prefix: '/api/lab9/products' });
 
 // Здесь добавляем новые строки для каждой лабы
 

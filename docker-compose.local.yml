@@ -1,9 +1,26 @@
+# # docker-compose.local.yml - для локальной разработки
+# services:
+#   backend:
+#     build:
+#       context: .
+#     container_name: local-backend-server
+#     # Команда выполняется из /app/backend, как указано в WORKDIR
+#     command: npm run dev
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       # Монтируем всё так же, как и в Dockerfile
+#       - ./backend:/app/backend
+#       - ./public:/app/public
+#       # Анонимный том теперь относится к подпапке
+#       - /app/backend/node_modules
+
 # docker-compose.local.yml - для локальной разработки
 services:
   backend:
     build:
       context: .
-    container_name: local-backend-server
+    container_name: local-examples-backend-server
     # Команда выполняется из /app/backend, как указано в WORKDIR
     command: npm run dev
     ports:
@@ -14,3 +31,40 @@ services:
       - ./public:/app/public
       # Анонимный том теперь относится к подпапке
       - /app/backend/node_modules
+    env_file:
+      - ./backend/.env.local
+    # Гарантируем, что сервис 'db' запустится перед 'backend'
+    depends_on:
+      - db
+
+  # 2. НОВЫЙ СЕРВИС: Локальная база данных PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: local-postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    ports:
+      # Пробрасываем порт для подключения внешними клиентами (DBeaver и т.д.)
+      - "5432:5432"
+    volumes:
+      # Используем именованный том для сохранения данных БД
+      - postgres_data_volume:/var/lib/postgresql/data
+
+  # 3. НОВЫЙ СЕРВИС: Веб-интерфейс Adminer
+  adminer:
+    image: adminer
+    container_name: local-adminer-ui
+    restart: unless-stopped
+    ports:
+      # Веб-интерфейс будет доступен по адресу http://localhost:8080
+      - "8080:8080"
+    # Гарантируем, что Adminer запустится только после старта базы данных
+    depends_on:
+      - db
+# Определяем именованные тома (volumes), которыми управляет Docker
+volumes:
+  # Новый том для данных PostgreSQL
+  postgres_data_volume:
