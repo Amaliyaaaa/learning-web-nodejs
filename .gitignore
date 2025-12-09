@@ -1,7 +1,8 @@
 # Зависимости
 node_modules
 # Локальная конфигурация
-.env
+# .env
+# .env.local
 # Логи
 *.log
 npm-debug.log*
