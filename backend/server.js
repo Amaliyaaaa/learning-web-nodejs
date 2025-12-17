@@ -18,21 +18,21 @@ fastify.register(fastifyPostgres, {
   connectionString: process.env.DATABASE_URL
 });  
 
-if (!process.env.SECRET_KEY) {
-  throw new Error('SECRET_KEY не задан в .env.local');
-}
+// if (!process.env.SECRET_KEY) {
+//   throw new Error('SECRET_KEY не задан в .env.local');
+// }
 
-fastify.register(fastifyJwt, {
-  secret: process.env.SECRET_KEY
-});
+// fastify.register(fastifyJwt, {
+//   secret: process.env.SECRET_KEY
+// });
 
-fastify.decorate("authenticate", async function (request, reply) {
-  try {
-    await request.jwtVerify();
-  } catch (err) {
-    reply.code(401).send({ error: "Unauthorized" });
-  }
-});
+// fastify.decorate("authenticate", async function (request, reply) {
+//   try {
+//     await request.jwtVerify();
+//   } catch (err) {
+//     reply.code(401).send({ error: "Unauthorized" });
+//   }
+// });
 
 // --- РЕГИСТРАЦИЯ СТАТИКИ ---
 
@@ -57,17 +57,15 @@ fastify.register(lab9Routes, { prefix: '/api/lab9' });
 fastify.register(task2Routes, { prefix: '/api/lab9/task2' });
 fastify.register(task3Routes, { prefix: '/api/lab9/task3' });
 
-fastify.register(lab10Routes, {
-  prefix: '/api/lab10',
-  authenticate: fastify.authenticate
-});
+// fastify.register(lab10Routes, {
+//   prefix: '/api/lab10',
+//   authenticate: fastify.authenticate
+// });
 
-fastify.register(lab11Routes, {
-  prefix: '/api/lab11',
-  authenticate: fastify.authenticate
-});
-
-// Здесь добавляем новые строки для каждой лабы
+// fastify.register(lab11Routes, {
+//   prefix: '/api/lab11',
+//   authenticate: fastify.authenticate
+// });
 
 // --- ЗАПУСК СЕРВERA ---
 const start = async () => {
