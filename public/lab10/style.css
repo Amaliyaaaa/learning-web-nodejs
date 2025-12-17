@@ -1,0 +1,42 @@
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.container {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+}
+h1 {
+  color: #1976d2;
+}
+.tasks {
+  list-style: none;
+  padding: 0;
+}
+.tasks li {
+  margin: 1rem 0;
+}
+.tasks a {
+  display: block;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s;
+}
+.tasks a:hover {
+  background: #e3f2fd;
+  border-color: #1976d2;
+  transform: translateX(5px);
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1976d2;
+  text-decoration: none;
+}

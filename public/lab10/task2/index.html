@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа №10 — Задание 2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/lab10/index.html" class="back-link">← Назад к списку заданий</a>
+  <h1>Расписание занятий</h1>
+  
+  <div id="auth-status" style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+    <strong>Статус авторизации:</strong> <span id="auth-status-text">Проверка...</span>
+  </div>
+
+  <nav class="nav">
+    <a href="#" onclick="showSection('schedule'); return false;">Расписание</a>
+    <a href="#" onclick="showSection('references'); return false;">Справочники</a>
+  </nav>
+
+  <div id="schedule-section" class="section">
+    <div class="filters">
+      <label>
+        Группа:
+        <select id="groupFilter" onchange="loadSchedule()">
+          <option value="">Все группы</option>
+        </select>
+      </label>
+      <label>
+        День недели:
+        <select id="dayFilter" onchange="loadSchedule()">
+          <option value="">Все дни</option>
+          <option value="1">Понедельник</option>
+          <option value="2">Вторник</option>
+          <option value="3">Среда</option>
+          <option value="4">Четверг</option>
+          <option value="5">Пятница</option>
+          <option value="6">Суббота</option>
+        </select>
+      </label>
+      <label>
+        Аудитория:
+        <select id="classroomFilter" onchange="loadSchedule()">
+          <option value="">Все аудитории</option>
+        </select>
+      </label>
+      <label>
+        Дисциплина:
+        <select id="subjectFilter" onchange="loadSchedule()">
+          <option value="">Все дисциплины</option>
+        </select>
+      </label>
+      <label>
+        Преподаватель:
+        <select id="teacherFilter" onchange="loadSchedule()">
+          <option value="">Все преподаватели</option>
+        </select>
+      </label>
+      <label>
+        Тип занятия:
+        <select id="lessonTypeFilter" onchange="loadSchedule()">
+          <option value="">Все типы</option>
+        </select>
+      </label>
+      <button onclick="clearFilters()">Очистить фильтры</button>
+      <button onclick="showAddScheduleForm()">Добавить занятие</button>
+    </div>
+    <div id="schedule-list">Загрузка...</div>
+  </div>
+
+  <div id="references-section" class="section" style="display: none;">
+    <div class="ref-tabs">
+      <button onclick="showRefTab('departments')">Кафедры</button>
+      <button onclick="showRefTab('positions')">Должности</button>
+      <button onclick="showRefTab('teachers')">Преподаватели</button>
+      <button onclick="showRefTab('buildings')">Корпуса</button>
+      <button onclick="showRefTab('classrooms')">Аудитории</button>
+      <button onclick="showRefTab('subjects')">Дисциплины</button>
+      <button onclick="showRefTab('groups')">Группы</button>
+      <button onclick="showRefTab('lesson-types')">Типы занятий</button>
+    </div>
+    <div id="ref-content"></div>
+  </div>
+
+  <div id="add-schedule-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeAddScheduleModal()">&times;</span>
+      <h2>Добавить занятие</h2>
+      <form id="add-schedule-form">
+        <label>День недели:
+          <select name="day_of_week" required>
+            <option value="1">Понедельник</option>
+            <option value="2">Вторник</option>
+            <option value="3">Среда</option>
+            <option value="4">Четверг</option>
+            <option value="5">Пятница</option>
+            <option value="6">Суббота</option>
+          </select>
+        </label>
+        <label>Номер пары:
+          <select name="lesson_number" required>
+            <option value="1">1 (08:00-09:30)</option>
+            <option value="2">2 (09:45-11:15)</option>
+            <option value="3">3 (11:30-13:00)</option>
+            <option value="4">4 (13:50-15:20)</option>
+            <option value="5">5 (15:35-17:05)</option>
+            <option value="6">6 (17:20-18:50)</option>
+          </select>
+        </label>
+        <label>Группа:
+          <select name="group_id" id="add-group-select" required></select>
+        </label>
+        <label>Дисциплина:
+          <select name="subject_id" id="add-subject-select" required></select>
+        </label>
+        <label>Преподаватель:
+          <select name="teacher_id" id="add-teacher-select" required></select>
+        </label>
+        <label id="add-teacher2-label" style="display: none;">Второй преподаватель (только для практики):
+          <select name="teacher_id2" id="add-teacher2-select">
+            <option value="">Не выбран</option>
+          </select>
+        </label>
+        <label>Корпус:
+          <select name="building_id" id="add-building-select" onchange="loadClassroomsForAdd(this.value)" required></select>
+        </label>
+        <label>Аудитория:
+          <select name="classroom_id" id="add-classroom-select" required></select>
+        </label>
+        <label>Тип занятия:
+          <select name="lesson_type_id" id="add-lesson-type-select" required></select>
+        </label>
+        <button type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="edit-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <div id="edit-modal-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 2 - Управление пользователями</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 2: Система управления пользователями</h1>
+        
+        <div class="section auth-section">
+            <h2>Авторизация</h2>
+            <div id="authStatus">
+                <span class="status not-authenticated">Не авторизован</span>
+            </div>
+            <div id="userInfo" style="margin-top: 10px;"></div>
+            <div style="margin-top: 15px;">
+                <div class="form-group">
+                    <label>Логин:</label>
+                    <input type="text" id="loginInput" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label>Пароль:</label>
+                    <input type="password" id="passwordInput" placeholder="пароль">
+                </div>
+                <button onclick="performLogin()">Войти</button>
+                <button onclick="performLogout()" class="danger">Выйти</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Список пользователей</h2>
+            <button onclick="loadUsers()">Обновить список</button>
+            <div id="usersTable"></div>
+        </div>
+
+        <div class="section" id="adminSection" style="display: none;">
+            <h2>Создать пользователя (только для админов)</h2>
+            <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" id="newUserLogin" placeholder="новый логин">
+            </div>
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" id="newUserPassword" placeholder="пароль">
+            </div>
+            <div class="form-group">
+                <label>Роль:</label>
+                <select id="newUserRole">
+                    <option value="user">Пользователь</option>
+                    <option value="admin">Администратор</option>
+                </select>
+            </div>
+            <button onclick="createUser()" class="success">Создать пользователя</button>
+            <div id="createUserResult"></div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Редактировать пользователя</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" id="editUserLogin">
+            </div>
+            <div class="form-group">
+                <label>Роль:</label>
+                <select id="editUserRole">
+                    <option value="user">Пользователь</option>
+                    <option value="admin">Администратор</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Новый пароль (оставьте пустым, чтобы не менять):</label>
+                <input type="password" id="editUserPassword" placeholder="новый пароль">
+            </div>
+            <button onclick="saveUser()">Сохранить</button>
+            <button onclick="generatePassword()" class="success">Сгенерировать пароль</button>
+            <div id="editUserResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/lab11';
+        let currentToken = null;
+        let currentUser = null;
+        let editingUserId = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            currentToken = localStorage.getItem('jwt_token');
+            if (currentToken) {
+                updateAuthStatus();
+                loadUsers();
+            }
+        });
+
+        function getAuthHeaders() {
+            if (!currentToken) {
+                return {};
+            }
+            return {
+                'Authorization': `Bearer ${currentToken}`
+            };
+        }
+
+        function updateAuthStatus() {
+            const statusDiv = document.getElementById('authStatus');
+            const userInfoDiv = document.getElementById('userInfo');
+            const adminSection = document.getElementById('adminSection');
+            
+            if (currentToken) {
+                try {
+                    const payload = JSON.parse(atob(currentToken.split('.')[1]));
+                    currentUser = payload;
+                    statusDiv.innerHTML = `<span class="status authenticated">Авторизован</span>`;
+                    userInfoDiv.innerHTML = `
+                        <strong>Пользователь:</strong> ${payload.login}<br>
+                        <strong>Роль:</strong> ${payload.role}<br>
+                        <strong>ID:</strong> ${payload.id}
+                    `;
+                    if (payload.role === 'admin') {
+                        adminSection.style.display = 'block';
+                    } else {
+                        adminSection.style.display = 'none';
+                    }
+                } catch (e) {
+                    statusDiv.innerHTML = '<span class="status not-authenticated">Ошибка токена</span>';
+                }
+            } else {
+                statusDiv.innerHTML = '<span class="status not-authenticated">Не авторизован</span>';
+                userInfoDiv.innerHTML = '';
+                adminSection.style.display = 'none';
+            }
+        }
+
+        async function performLogin() {
+            const login = document.getElementById('loginInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ login, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.token;
+                    localStorage.setItem('jwt_token', currentToken);
+                    updateAuthStatus();
+                    loadUsers();
+                    alert('Вход выполнен успешно');
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        }
+
+        function performLogout() {
+            currentToken = null;
+            localStorage.removeItem('jwt_token');
+            currentUser = null;
+            updateAuthStatus();
+            document.getElementById('usersTable').innerHTML = '';
+            alert('Выход выполнен');
+        }
+
+        async function loadUsers() {
+            if (!currentToken) {
+                document.getElementById('usersTable').innerHTML = '<p>Сначала выполните вход</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/task2/users`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayUsers(data.users || data);
+                } else {
+                    if (response.status === 401) {
+                        performLogout();
+                        alert('Сессия истекла. Пожалуйста, войдите снова.');
+                    } else {
+                        document.getElementById('usersTable').innerHTML = 
+                            `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                    }
+                }
+            } catch (error) {
+                document.getElementById('usersTable').innerHTML = 
+                    `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        function displayUsers(users) {
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Логин</th>
+                        <th>Роль</th>
+                        <th>Дата создания</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${users.map(user => `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.login}</td>
+                            <td><span class="role-badge ${user.role}">${user.role}</span></td>
+                            <td>${new Date(user.created_at).toLocaleString('ru-RU')}</td>
+                            <td>
+                                ${currentUser && currentUser.role === 'admin' ? `
+                                    <button onclick="openEditModal(${user.id}, '${user.login}', '${user.role}')">Редактировать</button>
+                                    ${user.id !== currentUser.id ? `
+                                        <button onclick="deleteUser(${user.id})" class="danger">Удалить</button>
+                                    ` : ''}
+                                ` : '<span style="color: #999;">Только просмотр</span>'}
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            document.getElementById('usersTable').innerHTML = '';
+            document.getElementById('usersTable').appendChild(table);
+        }
+
+        async function createUser() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Только администраторы могут создавать пользователей');
+                return;
+            }
+
+            const login = document.getElementById('newUserLogin').value;
+            const password = document.getElementById('newUserPassword').value;
+            const role = document.getElementById('newUserRole').value;
+            const resultDiv = document.getElementById('createUserResult');
+
+            try {
+                const response = await fetch(`${API_BASE}/task2/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ login, password, role })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>Пользователь создан: ${JSON.stringify(data, null, 2)}</pre></div>`;
+                    document.getElementById('newUserLogin').value = '';
+                    document.getElementById('newUserPassword').value = '';
+                    loadUsers();
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        function openEditModal(userId, login, role) {
+            editingUserId = userId;
+            document.getElementById('editUserLogin').value = login;
+            document.getElementById('editUserRole').value = role;
+            document.getElementById('editUserPassword').value = '';
+            document.getElementById('editUserResult').innerHTML = '';
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            editingUserId = null;
+        }
+
+        async function saveUser() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Только администраторы могут редактировать пользователей');
+                return;
+            }
+
+            const login = document.getElementById('editUserLogin').value;
+            const role = document.getElementById('editUserRole').value;
+            const password = document.getElementById('editUserPassword').value;
+            const resultDiv = document.getElementById('editUserResult');
+
+            const updateData = { login, role };
+            if (password) {
+                updateData.password = password;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/task2/users/${editingUserId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>Пользователь обновлен: ${JSON.stringify(data, null, 2)}</pre></div>`;
+                    setTimeout(() => {
+                        closeEditModal();
+                        loadUsers();
+                    }, 1000);
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function generatePassword() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Только администраторы могут генерировать пароли');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/task2/users/${editingUserId}/generate-password`, {
+                    method: 'POST',
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert(`Новый пароль: ${data.password}\n\nСкопируйте его, он больше не будет показан!`);
+                    document.getElementById('editUserPassword').value = data.password;
+                } else {
+                    alert('Ошибка: ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        }
+
+        async function deleteUser(userId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Только администраторы могут удалять пользователей');
+                return;
+            }
+
+            if (!confirm('Вы уверены, что хотите удалить этого пользователя?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/task2/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Пользователь удален');
+                    loadUsers();
+                } else {
+                    alert('Ошибка: ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+</body>
+</html>
+

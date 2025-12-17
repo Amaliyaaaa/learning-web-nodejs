@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа №10 — Задание 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/lab10/index.html" class="back-link">← Назад к списку заданий</a>
+  <h1>Интернет-магазин</h1>
+
+  <nav class="nav">
+    <a href="#" onclick="showSection('catalog'); return false;">Каталог</a>
+    <a href="#" onclick="showSection('orders'); return false;">Заказы</a>
+    <a href="#" onclick="showSection('cart'); return false;" id="cartLink">Корзина (0)</a>
+    <a href="#" onclick="showSection('admin'); return false;" id="adminLink" style="display: none;">Админ-панель</a>
+  </nav>
+  
+  <div id="auth-status" style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+    <strong>Статус авторизации:</strong> <span id="auth-status-text">Проверка...</span>
+  </div>
+
+  <div id="catalog-section" class="section">
+    <div class="filters">
+      <select id="categoryFilter" onchange="loadProducts()">
+        <option value="">Все категории</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Поиск по названию" oninput="loadProducts()">
+    </div>
+    <div id="products-list">Загрузка...</div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <div id="orders-section" class="section" style="display: none;">
+    <h2>Все заказы</h2>
+    <div id="orders-list">Загрузка...</div>
+    <div class="pagination" id="orders-pagination"></div>
+  </div>
+
+  <div id="cart-section" class="section" style="display: none;">
+    <h2>Корзина</h2>
+    <div id="cart-items"></div>
+    <div id="cart-summary"></div>
+  </div>
+
+  <div id="admin-section" class="section" style="display: none;">
+    <h2>Админ-панель: Управление товарами</h2>
+    <div class="add-product-form" style="background: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+      <h3>Добавить новый товар</h3>
+      <form id="addProductForm" style="display: grid; gap: 1rem; max-width: 600px;">
+        <div>
+          <label for="newProductTitle">Название товара: *</label>
+          <input type="text" id="newProductTitle" required style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box;">
+        </div>
+        <div>
+          <label for="newProductCategory">Категория: *</label>
+          <select id="newProductCategory" required style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box;">
+            <option value="">Выберите категорию</option>
+          </select>
+        </div>
+        <div>
+          <label for="newProductPrice">Цена (руб.): *</label>
+          <input type="number" id="newProductPrice" step="0.01" min="0" required style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box;">
+        </div>
+        <div>
+          <label for="newProductAmount">Количество: *</label>
+          <input type="number" id="newProductAmount" min="0" value="0" required style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box;">
+        </div>
+        <button type="submit" style="padding: 0.75rem; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;">Добавить товар</button>
+      </form>
+      <div id="addProductMessage" style="margin-top: 1rem;"></div>
+    </div>
+  </div>
+
+  <div id="product-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeProductModal()">&times;</span>
+      <div id="product-details"></div>
+    </div>
+  </div>
+
+  <div id="order-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeOrderModal()">&times;</span>
+      <div id="order-details"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

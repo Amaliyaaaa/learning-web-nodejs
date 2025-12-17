@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 1 - JWT Тесты</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 1: Тестирование JWT Аутентификации</h1>
+        
+        <div class="test-info">
+            <h3>Инструкция по тестированию:</h3>
+            <ol>
+                <li>Зарегистрируйте нового пользователя</li>
+                <li>Выполните вход и получите токен</li>
+                <li>Проверьте доступ к защищенным роутам (/profile, /admin)</li>
+                <li>Протестируйте смену пароля</li>
+                <li>Протестируйте выход (логаут)</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Статус авторизации</h2>
+            <div id="authStatus">
+                <span class="status not-authenticated">Не авторизован</span>
+            </div>
+            <div id="userInfo" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="section">
+            <h2>1. Регистрация пользователя</h2>
+            <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" id="registerLogin" placeholder="user1">
+            </div>
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" id="registerPassword" placeholder="user1234">
+            </div>
+            <button onclick="register()">Зарегистрироваться</button>
+            <div id="registerResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>2. Вход (Login)</h2>
+            <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" id="loginLogin" placeholder="user1">
+            </div>
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" id="loginPassword" placeholder="user1234">
+            </div>
+            <button onclick="login()">Войти</button>
+            <div id="loginResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>3. Профиль (защищенный роут)</h2>
+            <button onclick="getProfile()">Получить профиль</button>
+            <div id="profileResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>4. Админский раздел (только для админов)</h2>
+            <button onclick="getAdmin()">Получить админские данные</button>
+            <div id="adminResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>5. Смена пароля</h2>
+            <div class="form-group">
+                <label>Текущий пароль:</label>
+                <input type="password" id="oldPassword" placeholder="текущий пароль">
+            </div>
+            <div class="form-group">
+                <label>Новый пароль:</label>
+                <input type="password" id="newPassword" placeholder="новый пароль">
+            </div>
+            <button onclick="changePassword()">Изменить пароль</button>
+            <div id="changePasswordResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>6. Выход (Logout)</h2>
+            <button onclick="logout()">Выйти</button>
+            <div id="logoutResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>JWT Токен</h2>
+            <div id="tokenDisplay" class="token-display">Токен не получен</div>
+            <button onclick="copyToken()" style="margin-top: 10px;">Скопировать токен</button>
+            <p style="margin-top: 10px; color: #666; font-size: 14px;">
+                Проверьте токен на <a href="https://jwt.io" target="_blank">jwt.io</a>
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Результаты тестов из методички</h2>
+            <p>Ниже представлены примеры запросов и ответов для тестов 1-5 из лабораторной работы:</p>
+            
+            <div class="test-result">
+                <h3>Тест 1: Регистрация пользователя</h3>
+                <p><strong>Запрос:</strong></p>
+                <pre>POST http://localhost:3000/api/lab11/register
+Content-Type: application/json
+
+{
+  "login": "user1",
+  "password": "user1234"
+}</pre>
+                <p><strong>Ответ (201):</strong></p>
+                <pre>{
+  "id": 5,
+  "login": "user1",
+  "role_id": 1,
+  "created_at": "2025-12-07T17:09:47.306Z"
+}</pre>
+            </div>
+
+            <div class="test-result">
+                <h3>Тест 2: Логин под этим пользователем</h3>
+                <p><strong>Запрос:</strong></p>
+                <pre>POST http://localhost:3000/api/lab11/login
+Content-Type: application/json
+
+{
+  "login": "user1",
+  "password": "user1234"
+}</pre>
+                <p><strong>Ответ:</strong></p>
+                <pre>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibG9naW4iOiJ1c2VyMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY1MTI3NTc4LCJleHAiOjE3NjUxMjg0Nzh9.pbdUVGyaqx6n_uDZYoza_M6E1vAsU4f3QqUp9dtnPjw",
+  "user": {
+    "id": 5,
+    "login": "user1",
+    "role": "user"
+  }
+}</pre>
+                <p><strong>Примечание:</strong> Скопируйте токен и проверьте его на <a href="https://jwt.io" target="_blank">jwt.io</a>. 
+                В разделе Secret введите ваш SECRET_KEY из .env.local. 
+                В разделе Decoded Payload, Claims Table, строка Exp вы увидите время окончания срока действия токена (15 минут).</p>
+            </div>
+
+            <div class="test-result">
+                <h3>Тест 3: Запрос к /profile</h3>
+                <p><strong>Запрос:</strong></p>
+                <pre>GET http://localhost:3000/api/lab11/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+                <p><strong>Ответ:</strong></p>
+                <pre>{
+  "id": 5,
+  "login": "user1",
+  "role": "user"
+}</pre>
+            </div>
+
+            <div class="test-result">
+                <h3>Тест 4: Запрос к /admin (с токеном обычного пользователя)</h3>
+                <p><strong>Запрос:</strong></p>
+                <pre>GET http://localhost:3000/api/lab11/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+                <p><strong>Ответ (403):</strong></p>
+                <pre>{
+  "error": "Forbidden: admin only"
+}</pre>
+            </div>
+
+            <div class="test-result">
+                <h3>Тест 5: Изменение роли на admin и повторный запрос к /admin</h3>
+                <p><strong>SQL запрос для изменения роли:</strong></p>
+                <pre>UPDATE lab11.users 
+SET role_id = (SELECT id FROM lab11.roles WHERE name = 'admin') 
+WHERE login = 'user1';</pre>
+                <p><strong>Важно!</strong> После изменения роли необходимо заново выполнить логин и получить новый токен!</p>
+                <p><strong>Запрос к /admin (с новым токеном):</strong></p>
+                <pre>GET http://localhost:3000/api/lab11/admin
+Authorization: Bearer [новый токен после повторного логина]</pre>
+                <p><strong>Ответ:</strong></p>
+                <pre>{
+  "message": "Добро пожаловать в админский раздел!",
+  "user": {
+    "id": 5,
+    "login": "user1",
+    "role": "admin"
+  }
+}</pre>
+            </div>
+
+            <div class="test-result">
+                <h3>Скриншоты Postman</h3>
+                <p>Для демонстрации работы API рекомендуется сделать скриншоты следующих запросов в Postman:</p>
+                <ol>
+                    <li>Регистрация пользователя (POST /api/lab11/register)</li>
+                    <li>Логин (POST /api/lab11/login) - показать токен в ответе</li>
+                    <li>Профиль (GET /api/lab11/profile) - с заголовком Authorization</li>
+                    <li>Админ (GET /api/lab11/admin) - сначала с ролью user (403), затем с ролью admin (200)</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/lab11';
+        let currentToken = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            currentToken = localStorage.getItem('jwt_token');
+            updateAuthStatus();
+        });
+
+        function updateAuthStatus() {
+            const statusDiv = document.getElementById('authStatus');
+            const userInfoDiv = document.getElementById('userInfo');
+            
+            if (currentToken) {
+                statusDiv.innerHTML = '<span class="status authenticated">Авторизован</span>';
+                try {
+                    const payload = JSON.parse(atob(currentToken.split('.')[1]));
+                    userInfoDiv.innerHTML = `
+                        <strong>Пользователь:</strong> ${payload.login}<br>
+                        <strong>Роль:</strong> ${payload.role}<br>
+                        <strong>ID:</strong> ${payload.id}
+                    `;
+                } catch (e) {
+                    userInfoDiv.innerHTML = 'Ошибка декодирования токена';
+                }
+            } else {
+                statusDiv.innerHTML = '<span class="status not-authenticated">Не авторизован</span>';
+                userInfoDiv.innerHTML = '';
+            }
+        }
+
+        function getAuthHeaders() {
+            if (!currentToken) {
+                return {};
+            }
+            return {
+                'Authorization': `Bearer ${currentToken}`
+            };
+        }
+
+        async function register() {
+            const login = document.getElementById('registerLogin').value;
+            const password = document.getElementById('registerPassword').value;
+            const resultDiv = document.getElementById('registerResult');
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ login, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function login() {
+            const login = document.getElementById('loginLogin').value;
+            const password = document.getElementById('loginPassword').value;
+            const resultDiv = document.getElementById('loginResult');
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ login, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentToken = data.token;
+                    localStorage.setItem('jwt_token', currentToken);
+                    updateAuthStatus();
+                    updateTokenDisplay();
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function getProfile() {
+            const resultDiv = document.getElementById('profileResult');
+
+            if (!currentToken) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Сначала выполните вход</pre></div>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/profile`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                    if (response.status === 401) {
+                        currentToken = null;
+                        localStorage.removeItem('jwt_token');
+                        updateAuthStatus();
+                        updateTokenDisplay();
+                    }
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function getAdmin() {
+            const resultDiv = document.getElementById('adminResult');
+
+            if (!currentToken) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Сначала выполните вход</pre></div>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/admin`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function changePassword() {
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const resultDiv = document.getElementById('changePasswordResult');
+
+            if (!currentToken) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Сначала выполните вход</pre></div>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/change-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ oldPassword, newPassword })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        async function logout() {
+            const resultDiv = document.getElementById('logoutResult');
+
+            if (!currentToken) {
+                resultDiv.innerHTML = `<div class="result error"><pre>Вы не авторизованы</pre></div>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/logout`, {
+                    method: 'POST',
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+                
+                currentToken = null;
+                localStorage.removeItem('jwt_token');
+                updateAuthStatus();
+                updateTokenDisplay();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                currentToken = null;
+                localStorage.removeItem('jwt_token');
+                updateAuthStatus();
+                updateTokenDisplay();
+                resultDiv.innerHTML = `<div class="result error"><pre>Ошибка: ${error.message}</pre></div>`;
+            }
+        }
+
+        function updateTokenDisplay() {
+            const tokenDiv = document.getElementById('tokenDisplay');
+            if (currentToken) {
+                tokenDiv.textContent = currentToken;
+            } else {
+                tokenDiv.textContent = 'Токен не получен';
+            }
+        }
+
+        function copyToken() {
+            if (currentToken) {
+                navigator.clipboard.writeText(currentToken).then(() => {
+                    alert('Токен скопирован в буфер обмена');
+                });
+            } else {
+                alert('Токен не получен');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', updateTokenDisplay);
+    </script>
+</body>
+</html>
+
