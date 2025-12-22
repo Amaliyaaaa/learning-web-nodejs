@@ -184,7 +184,7 @@ class ShopService {
     const { title, price, amount, category_id } = productData;
     const query = `
       INSERT INTO lab10.products (title, price, amount, category_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4)
       RETURNING *
     `;
     const { rows } = await db.query(query, [title, price, amount, category_id]);
